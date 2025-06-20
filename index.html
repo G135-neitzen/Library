@@ -2,28 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <meta name="viewport" content="width=initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src = "script.js" defer></script>
     <title>Library</title>
 </head>
 <body>
     <header>
         <h1>Library</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="books.html">Books</a></li>
-                <li><a href="authors.html">Authors</a></li>
-                <li><a href="genres.html">Genres</a></li>
-            </ul>
-        </nav>
     </header>
     <main>
         <h2>Welcome to the Library</h2>
         <p>This is a simple library management system.</p>
         <p>Use the navigation links to explore books, authors, and genres.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Genre</th>
+                    <th>Number of pages</th>
+                    <th>Id</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <button data-open-modal>Add new book</button>
+        <dialog data-modal>
+            <form class= "modal">
+                <h3>Add New Book</h3>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" required>
+                <label for="genre">Genre:</label>
+                <input type="text" id="genre" name="genre" required>
+                <label for="pages">Number of Pages:</label>
+                <input type="number" id="pages" name="pages" required>
+                <button type="submit" class="submitBook">Add Book</button>
+                <button type="submit" formmethod="dialog">Cancel</button>
+            </form>
+            <button data-close-modal>Close</button>
+        </dialog>
     </main>
     <footer>
         <p>&copy; 2023 Library Management System</p>
     </footer>
+
 </body>
 </html>

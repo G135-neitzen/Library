@@ -1,11 +1,23 @@
 const myLibrary = [];
 
-function Book(bookTitle, author, gender, numberOfPages, read) {
+function Book(bookTitle, author, gender, numberOfPages, idNNumber) {
     this.bookTitle = bookTitle;
     this.author = author;
     this.gender = gender;
     this.numberOfPages = numberOfPages;
+    this.idNNumber = idNNumber;
+}
+
+function readStatus(bookTitle, author, gender, numberOfPages, idNNumber, read) {
+    Book.call(this, bookTitle, author, gender, numberOfPages, idNNumber);
     this.read = read;
+}
+Object.setPrototypeOf(readStatus.prototype, Book.prototype);
+
+function createId () {
+    const crypto = require('crypto');
+    const id = crypto.randomUUID();
+    return id;
 }
 
 function createBook() {
@@ -17,9 +29,11 @@ function createBook() {
             form.elements['author'].value,
             form.elements['gender'].value,
             form.elements['numberOfPages'].value,
+            form.elements['idNNumber'].value = createId(),
+            form.elements['read'].checked
         );
         form.reset();
-        modal.close();
+        document.querySelector("[data-modal]").close();
         addBookToLibrary(newBook);
     });
 }
@@ -41,3 +55,9 @@ const displayModal = function () {
         modal.close();
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    createBook();
+    displayModal();
+});
+

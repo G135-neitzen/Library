@@ -26,31 +26,8 @@
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+            <tbody class ="book-list">
+                <!-- Book entries will be dynamically added here -->
             </tbody>
         </table>
         <button data-open-modal>Add new book</button>
@@ -64,9 +41,9 @@
                 <label for="genre">Genre:</label>
                 <input type="text" id="genre" name="genre" required>
                 <label for="pages">Number of Pages:</label>
-                <input type="number" id="pages" name="pages" required>
+                <input type="text" id="pages" name="pages" required>
                 <button type="submit" class="submitBook">Add Book</button>
-                <button type="submit" formmethod="dialog">Cancel</button>
+                <button type="reset">Reset</button>
             </form>
             <button data-close-modal>Close</button>
         </dialog>

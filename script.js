@@ -1,45 +1,61 @@
+
 const myLibrary = [];
 
-function Book(bookTitle, author, gender, numberOfPages, idNNumber) {
-    this.bookTitle = bookTitle;
+function Book(title, author, genre, pages, id, read) {
+    this.title = title;
     this.author = author;
-    this.gender = gender;
-    this.numberOfPages = numberOfPages;
-    this.idNNumber = idNNumber;
-}
-
-function readStatus(bookTitle, author, gender, numberOfPages, idNNumber, read) {
-    Book.call(this, bookTitle, author, gender, numberOfPages, idNNumber);
+    this.genre = genre;
+    this.pages = pages;
+    this.id = id;
     this.read = read;
 }
-Object.setPrototypeOf(readStatus.prototype, Book.prototype);
 
-function createId () {
-    const crypto = require('crypto');
-    const id = crypto.randomUUID();
-    return id;
-}
-
-function createBook() {
-    const form = document.getElementsByClassName("submitBook")[0];
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const newBook = new Book(
-            form.elements['bookTitle'].value,
-            form.elements['author'].value,
-            form.elements['gender'].value,
-            form.elements['numberOfPages'].value,
-            form.elements['idNNumber'].value = createId(),
-            form.elements['read'].checked
-        );
-        form.reset();
-        document.querySelector("[data-modal]").close();
-        addBookToLibrary(newBook);
-    });
+function createId() {
+    // Usa crypto.randomUUID() si está disponible, si no, usa Date.now()
+    return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString();
 }
 
 function addBookToLibrary(book) {
     myLibrary.push(book);
+}
+
+function displayBooks(book) {
+    const bookList = document.querySelector(".book-list");
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.genre}</td>
+        <td>${book.pages}</td> 
+        <td>${book.id}</td>
+        <td>${book.read}</td>
+        <td><button data-delete-book="${book.id}">Delete</button></td>
+    `;
+    bookList.appendChild(row);
+}
+
+function createBook() {
+    const form = document.querySelector('.modal');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const title = form.elements['title'].value;
+        const author = form.elements['author'].value;
+        const genre = form.elements['genre'].value;
+        const pages = form.elements['pages'].value;
+        const read = form.elements['read'] ? form.elements['read'].value : 'unread';
+        const newBook = new Book(
+            title,
+            author,
+            genre,
+            pages,
+            createId(),
+            read
+        );
+        form.reset();
+        document.querySelector("[data-modal]").close();
+        addBookToLibrary(newBook);
+        displayBooks(newBook);
+    });
 }
 
 const displayModal = function () {
@@ -48,11 +64,17 @@ const displayModal = function () {
     const closeButton = document.querySelector("[data-close-modal]");
 
     openButton.addEventListener('click', () => {
-        modal.show();
+        modal.showModal();
     });
 
     closeButton.addEventListener('click', () => {
         modal.close();
+    });
+
+    modal.addEventListener('click', e => {
+        if (e.target === modal) {
+            modal.close();
+        }
     });
 }
 
@@ -60,4 +82,3 @@ document.addEventListener('DOMContentLoaded', () => {
     createBook();
     displayModal();
 });
-

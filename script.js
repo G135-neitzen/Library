@@ -1,15 +1,35 @@
 
 const myLibrary = [];
 
-function Book(title, author, genre, pages, id, read) {
+function Book(title, author, genre, pages, id) {
     this.title = title;
     this.author = author;
     this.genre = genre;
     this.pages = pages;
     this.id = id;
-    this.read = read;
+
 }
 
+function readStatus(title, author, genre, pages, id, read) {
+    Book.call(this, title, author, genre, pages, id);
+    this.read = read
+}
+
+Object.setPrototypeOf(readStatus.prototype, Book.prototype);
+
+readStatus.prototype.toggleReadStatus = function(){
+    const status = document.createElement('select');
+    status.innerHTML = `
+        <option value="read">Read</option>
+        <option value="unread">Unread</option>
+        <option value="currently reading">Currently Reading</option>
+    `;
+    status.value = this.read;
+    status.addEventListener('change', (event) => {
+        this.read = event.target.value;
+    });
+    return status;
+}
 function createId() {
     // Use crypto.randomUUID() if is available, if not, use Date.now()
     return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString();
@@ -26,11 +46,12 @@ function displayBooks(book) {
         <td>${book.title}</td>
         <td>${book.author}</td>
         <td>${book.genre}</td>
-        <td>${book.pages}</td> 
+        <td>${book.pages}</td>   
         <td>${book.id}</td>
-        <td>${book.read}</td>
+        <td></td>
         <td><button data-delete-book="${book.id}">Delete</button></td>
     `;
+    row.children[5].appendChild(book.toggleReadStatus());
     bookList.appendChild(row);
 }
 
@@ -58,8 +79,8 @@ function createBook() {
         const author = form.elements['author'].value;
         const genre = form.elements['genre'].value;
         const pages = form.elements['pages'].value;
-        const read = form.elements['read'] ? form.elements['read'].value : 'unread';
-        const newBook = new Book(
+        const read = 'unread'; // Default value for read status
+        const newBook = new readStatus(
             title,
             author,
             genre,
@@ -67,7 +88,7 @@ function createBook() {
             createId(),
             read
         );
-        form.reset();
+        form.reset(); 
         document.querySelector("[data-modal]").close();
         addBookToLibrary(newBook);
         displayBooks(newBook);

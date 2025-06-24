@@ -34,6 +34,22 @@ function displayBooks(book) {
     bookList.appendChild(row);
 }
 
+const setupDeleteListener = () => {
+    const deleteButtons = document.querySelectorAll('[data-delete-book]');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const bookId = event.target.getAttribute('data-delete-book');
+                // Encuentra el índice del libro en myLibrary y elimínalo
+                const bookIndex = myLibrary.findIndex(book => book.id === bookId);
+                if (bookIndex !== -1) {
+                    myLibrary.splice(bookIndex, 1);
+                    event.target.closest('tr').remove();
+                }
+            });
+        });
+    }
+
+
 function createBook() {
     const form = document.querySelector('.modal');
     form.addEventListener('submit', (event) => {
@@ -55,6 +71,7 @@ function createBook() {
         document.querySelector("[data-modal]").close();
         addBookToLibrary(newBook);
         displayBooks(newBook);
+        setupDeleteListener();
     });
 }
 

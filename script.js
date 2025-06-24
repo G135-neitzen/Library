@@ -11,7 +11,7 @@ function Book(title, author, genre, pages, id, read) {
 }
 
 function createId() {
-    // Usa crypto.randomUUID() si está disponible, si no, usa Date.now()
+    // Use crypto.randomUUID() if is available, if not, use Date.now()
     return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString();
 }
 
@@ -39,7 +39,7 @@ const setupDeleteListener = () => {
     deleteButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             const bookId = event.target.getAttribute('data-delete-book');
-                // Encuentra el índice del libro en myLibrary y elimínalo
+                // Find the index of the book in myLibrary and remove it
                 const bookIndex = myLibrary.findIndex(book => book.id === bookId);
                 if (bookIndex !== -1) {
                     myLibrary.splice(bookIndex, 1);

@@ -1,35 +1,36 @@
 
 const myLibrary = [];
 
-function Book(title, author, genre, pages, id) {
-    this.title = title;
-    this.author = author;
-    this.genre = genre;
-    this.pages = pages;
-    this.id = id;
-
+class Book {
+    constructor(title, author, genre, pages, id) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.pages = pages;
+        this.id = id;
+    }
 }
 
-function readStatus(title, author, genre, pages, id, read) {
-    Book.call(this, title, author, genre, pages, id);
-    this.read = read
-}
-
-Object.setPrototypeOf(readStatus.prototype, Book.prototype);
-
-readStatus.prototype.toggleReadStatus = function(){
-    const status = document.createElement('select');
-    status.innerHTML = `
+class readStatus extends Book {
+    constructor(title, author, genre, pages, id, read) {
+        super(title, author, genre, pages, id)
+        this.read = read;
+    }
+    toggleReadStatus() {
+        const status = document.createElement('select');
+        status.innerHTML = `
         <option value="read">Read</option>
         <option value="unread">Unread</option>
         <option value="currently reading">Currently Reading</option>
     `;
-    status.value = this.read;
-    status.addEventListener('change', (event) => {
-        this.read = event.target.value;
-    });
-    return status;
+        status.value = this.read;
+        status.addEventListener('change', (event) => {
+            this.read = event.target.value;
+        });
+        return status;
+    }
 }
+
 function createId() {
     // Use crypto.randomUUID() if is available, if not, use Date.now()
     return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString();
@@ -40,6 +41,7 @@ function addBookToLibrary(book) {
 }
 
 function displayBooks(book) {
+    const read = new readStatus();
     const bookList = document.querySelector(".book-list");
     const row = document.createElement('tr');
     row.innerHTML = `
@@ -51,7 +53,7 @@ function displayBooks(book) {
         <td></td>
         <td><button data-delete-book="${book.id}">Delete</button></td>
     `;
-    row.children[5].appendChild(book.toggleReadStatus());
+    row.children[5].appendChild(read.toggleReadStatus());
     bookList.appendChild(row);
 }
 
@@ -60,15 +62,15 @@ const setupDeleteListener = () => {
     deleteButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             const bookId = event.target.getAttribute('data-delete-book');
-                // Find the index of the book in myLibrary and remove it
-                const bookIndex = myLibrary.findIndex(book => book.id === bookId);
-                if (bookIndex !== -1) {
-                    myLibrary.splice(bookIndex, 1);
-                    event.target.closest('tr').remove();
-                }
-            });
+            // Find the index of the book in myLibrary and remove it
+            const bookIndex = myLibrary.findIndex(book => book.id === bookId);
+            if (bookIndex !== -1) {
+                myLibrary.splice(bookIndex, 1);
+                event.target.closest('tr').remove();
+            }
         });
-    }
+    });
+}
 
 
 function createBook() {
@@ -88,7 +90,7 @@ function createBook() {
             createId(),
             read
         );
-        form.reset(); 
+        form.reset();
         document.querySelector("[data-modal]").close();
         addBookToLibrary(newBook);
         displayBooks(newBook);
